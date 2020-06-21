@@ -129,4 +129,25 @@ class PermissionCheckHelper
             self::getDelimiterFor('words')
         );
     }
+
+    /**
+     * Get proxied action name.
+     *
+     * @param  string  $calledProxy
+     * @param  string  $action
+     * @return string
+     */
+    public static function getProxiedAction(string $calledProxy, string $action)
+    {
+        $pasteAfter = config("permission.proxied_action_paste_after", true);
+
+        return sprintf(
+            $pasteAfter
+                ? '%1$s%2$s%3$s'
+                : '%3$s%2$s%1$s',
+            PermissionCheckHelper::getActionByMethodName($calledProxy),
+            PermissionCheckHelper::getDelimiterFor('words'),
+            $action
+        );
+    }
 }
