@@ -113,7 +113,7 @@ abstract class MagicPolicy
             if (!$action) {
                 return $this->checkPermissionByMethodName($user, $this->getCalledMethod(), $subject);
             }
-
+            
             $can = $user->can(
                 PermissionCheckHelper::key(
                     $this->getSubject($subject),
@@ -222,9 +222,21 @@ abstract class MagicPolicy
 
     /**
      * Returns called proxy method.
+     *
+     * @return string|null
      */
     protected function calledProxy()
     {
+        if (!$this->calledProxy) {
+            return $this->calledProxy;
+        }
+
+        $calledMethod = $this->getCalledMethod();
+
+        if (array_key_exists($calledMethod.':false', $this->getProxies())) {
+            return $calledMethod;
+        }
+
         return $this->calledProxy;
     }
 
