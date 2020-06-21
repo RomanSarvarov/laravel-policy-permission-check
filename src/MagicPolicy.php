@@ -157,19 +157,23 @@ abstract class MagicPolicy
      */
     protected function checkProxiedPermission(User $user, $action, $subject = null)
     {
-        $calledProxy = $this->calledProxy();
+        try {
+            $calledProxy = $this->calledProxy();
 
-        throw_if(
-            is_null($calledProxy),
-            \InvalidArgumentException::class,
-            'Cannot get called proxy method.'
-        );
+            throw_if(
+                is_null($calledProxy),
+                \InvalidArgumentException::class,
+                'Cannot get called proxy method.'
+            );
 
-        return $this->checkPermission(
-            $user,
-            PermissionCheckHelper::getProxiedAction($calledProxy, $action),
-            $subject
-        );
+            return $this->checkPermission(
+                $user,
+                PermissionCheckHelper::getProxiedAction($calledProxy, $action),
+                $subject
+            );
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     /**
