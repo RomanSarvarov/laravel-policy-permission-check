@@ -113,10 +113,7 @@ abstract class MagicPolicy
             if (!$action) {
                 return $this->checkPermissionByMethodName($user, $this->getCalledMethod(), $subject);
             }
-dd(PermissionCheckHelper::key(
-    $this->getSubject($subject),
-    $action
-));
+
             $can = $user->can(
                 PermissionCheckHelper::key(
                     $this->getSubject($subject),
@@ -147,6 +144,34 @@ dd(PermissionCheckHelper::key(
         );
 
         return $this->checkPermission($user, $method, $subject);
+    }
+
+    protected function checkProxiedPermission(User $user, $action = null, $subject = null)
+    {
+        throw_if(
+            is_null($action),
+            \InvalidArgumentException::class,
+            'Bad permission action.'
+        );
+
+        throw_if(
+            is_null($this->calledProxy()),
+            \InvalidArgumentException::class,
+            'Cannot get called proxy method.'
+        );
+
+        $pasteAfter = config("permission.proxied_action_paste_after", true);
+
+        return $this->checkPermission(
+            $user,
+            sprintf(
+                $pasteAfter ? '%1$s%2$s%3$s' : '%3$s%2$s%1$s',
+                $this->calledProxy(),
+                PermissionCheckHelper::getDelimiterFor('words'),
+                $action
+            ),
+            $subject
+        );
     }
 
     /**
