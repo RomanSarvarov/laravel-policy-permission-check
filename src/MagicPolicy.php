@@ -113,7 +113,7 @@ abstract class MagicPolicy
             if (!$action) {
                 return $this->checkPermissionByMethodName($user, $this->getCalledMethod(), $subject);
             }
-            
+
             $can = $user->can(
                 PermissionCheckHelper::key(
                     $this->getSubject($subject),
