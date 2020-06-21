@@ -153,7 +153,6 @@ abstract class MagicPolicy
      * @param  string  $action
      * @param  null  $subject
      * @return bool
-     * @throws \Throwable
      */
     protected function checkProxiedPermission(User $user, $action, $subject = null)
     {
