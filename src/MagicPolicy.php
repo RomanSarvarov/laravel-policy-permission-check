@@ -165,11 +165,9 @@ abstract class MagicPolicy
             'Cannot get called proxy method.'
         );
 
-        $pasteAfter = config("permission.proxied_action_paste_after", true);
-
         return $this->checkPermission(
             $user,
-            PermissionCheckHelper::getProxiedAction($calledProxy, $action);
+            PermissionCheckHelper::getProxiedAction($calledProxy, $action),
             $subject
         );
     }
