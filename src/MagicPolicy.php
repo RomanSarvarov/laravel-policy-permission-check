@@ -32,6 +32,11 @@ abstract class MagicPolicy
     private $calledMethod;
 
     /**
+     * @var string Called proxy method.
+     */
+    private $calledProxy;
+
+    /**
      * Processes all called methods (if they do not exist).
      * Searches for a resolution based on the method being called.
      *
@@ -79,6 +84,8 @@ abstract class MagicPolicy
                         $this->calledMethod = $to;
                     }
 
+                    $this->calledProxy = $method;
+
                     return $this->$to(...$arguments);
                 }
             }
@@ -106,7 +113,10 @@ abstract class MagicPolicy
             if (!$action) {
                 return $this->checkPermissionByMethodName($user, $this->getCalledMethod(), $subject);
             }
-
+dd(PermissionCheckHelper::key(
+    $this->getSubject($subject),
+    $action
+));
             $can = $user->can(
                 PermissionCheckHelper::key(
                     $this->getSubject($subject),
@@ -182,6 +192,14 @@ abstract class MagicPolicy
         $this->permissionSubject = PermissionCheckHelper::subject($subject);
 
         return $this->permissionSubject;
+    }
+
+    /**
+     * Returns called proxy method.
+     */
+    protected function calledProxy()
+    {
+        return $this->calledProxy;
     }
 
     /**

@@ -26,7 +26,7 @@ class PermissionCheckHelper
     private static function getPermissionKeyPattern()
     {
         return config(
-            'permission.key_pattern',
+            'permission.naming_rules.key_pattern',
             '{action}{delimiter}{subject}'
         );
     }
@@ -76,7 +76,7 @@ class PermissionCheckHelper
          *
          */
 
-        return config("permission.delimiters.between_{$needle}", ' ');
+        return config("permission.naming_rules.delimiters.between_{$needle}", ' ');
     }
 
     /**
@@ -109,7 +109,9 @@ class PermissionCheckHelper
          *
          * super user -> super users
          */
-        $subject = Str::plural($subject);
+        if (config("permission.naming_rules.subject_plural", true)) {
+            $subject = Str::plural($subject);
+        }
 
         return $subject;
     }
