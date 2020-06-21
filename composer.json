@@ -1,0 +1,17 @@
+{
+    "name": "sarvarov/laravel-policy-permission-check",
+    "description": "Laravel abstract policy class with magic methods and helpers.",
+    "license": "MIT",
+    "require": {},
+    "authors": [
+        {
+            "name": "Roman Sarvarov",
+            "email": "roman@sarvarov.dev"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sarvarov\\LaravelPolicyPermissionCheck\\": "src/"
+        }
+    }
+}
