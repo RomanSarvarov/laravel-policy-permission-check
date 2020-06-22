@@ -129,14 +129,15 @@ abstract class MagicPolicy
         }
     }
 
-    /**
-     * Checks the user's permission by method name.
-     *
-     * @param  User  $user
-     * @param $mthod
-     * @param  null  $subject
-     * @return bool
-     */
+	/**
+	 * Checks the user's permission by method name.
+	 *
+	 * @param User $user
+	 * @param $method
+	 * @param null $subject
+	 *
+	 * @return bool
+	 */
     protected function checkPermissionByMethodName(User $user, $method, $subject = null)
     {
         $action = PermissionCheckHelper::getActionByMethodName(

@@ -36,6 +36,7 @@ class PermissionCheckHelper
      *
      * @param  string  $subject
      * @param  string  $action
+     *
      * @return string
      */
     public static function key($subject, $action)
@@ -57,6 +58,7 @@ class PermissionCheckHelper
      * Returns delimiter for permission name.
      *
      * @param  string  $needle
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     public static function getDelimiterFor(string $needle)
@@ -83,6 +85,7 @@ class PermissionCheckHelper
      * Returns formatted subject name.
      *
      * @param  object|string  $subject
+     *
      * @return string
      * @throws \Throwable
      */
@@ -94,22 +97,28 @@ class PermissionCheckHelper
             'Bad permission subject.'
         );
 
+        $subject = class_basename($subject);
+
         /*
          * Converts from CamelCase to snake_case with a ' ' delimiter (instead of '_').
          *
          * SuperUser -> super user
          */
-        $subject = Str::snake(
-            class_basename($subject),
-            self::getDelimiterFor('words')
-        );
+        if (config('permission.naming_rules.subject_snake_case', true)) {
+            $subject = Str::snake(
+                $subject,
+                self::getDelimiterFor('words')
+            );
+        } elseif (config('permission.naming_rules.subject_lower_case', true)) {
+            $subject = Str::lower($subject);
+        }
 
         /*
          * ... makes it plural.
          *
          * super user -> super users
          */
-        if (config("permission.naming_rules.subject_plural", true)) {
+        if (config('permission.naming_rules.subject_plural', true)) {
             $subject = Str::plural($subject);
         }
 
@@ -120,14 +129,23 @@ class PermissionCheckHelper
      * Returns action name based on method name.
      *
      * @param  string  $method
+     *
      * @return string
      */
     public static function getActionByMethodName(string $method)
     {
-        return Str::snake(
-            $method,
-            self::getDelimiterFor('words')
-        );
+        if (config('permission.naming_rules.action_snake_case', true)) {
+            return Str::snake(
+                $method,
+                self::getDelimiterFor('words')
+            );
+        }
+
+        if (config('permission.naming_rules.action_lower_case', true)) {
+            $method = Str::lower($method);
+        }
+
+        return $method;
     }
 
     /**
@@ -135,11 +153,12 @@ class PermissionCheckHelper
      *
      * @param  string  $calledProxy
      * @param  string  $action
+     *
      * @return string
      */
     public static function getProxiedAction(string $calledProxy, string $action)
     {
-        $pasteAfter = config("permission.proxied_action_paste_after", true);
+        $pasteAfter = config('permission.proxied_action_paste_after', true);
 
         return sprintf(
             $pasteAfter
