@@ -164,8 +164,8 @@ class PermissionCheckHelper
             $pasteAfter
                 ? '%1$s%2$s%3$s'
                 : '%3$s%2$s%1$s',
-            PermissionCheckHelper::getActionByMethodName($calledProxy),
-            PermissionCheckHelper::getDelimiterFor('words'),
+            self::getActionByMethodName($calledProxy),
+            self::getDelimiterFor('words'),
             $action
         );
     }

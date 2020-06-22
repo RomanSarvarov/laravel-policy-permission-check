@@ -105,6 +105,7 @@ abstract class MagicPolicy
      * @param  User  $user
      * @param  string  $action
      * @param  Model|string|null  $subject
+     *
      * @return bool
      */
     protected function checkPermission(User $user, $action = null, $subject = null)
@@ -129,22 +130,20 @@ abstract class MagicPolicy
         }
     }
 
-	/**
-	 * Checks the user's permission by method name.
-	 *
-	 * @param User $user
-	 * @param $method
-	 * @param null $subject
-	 *
-	 * @return bool
-	 */
+    /**
+     * Checks the user's permission by method name.
+     *
+     * @param  User  $user
+     * @param  string  $method
+     * @param  string|null  $subject
+     *
+     * @return bool
+     */
     protected function checkPermissionByMethodName(User $user, $method, $subject = null)
     {
-        $action = PermissionCheckHelper::getActionByMethodName(
-            $this->getCalledMethod()
-        );
+        $action = PermissionCheckHelper::getActionByMethodName($method);
 
-        return $this->checkPermission($user, $method, $subject);
+        return $this->checkPermission($user, $action, $subject);
     }
 
     /**
@@ -153,6 +152,7 @@ abstract class MagicPolicy
      * @param  User  $user
      * @param  string  $action
      * @param  null  $subject
+     *
      * @return bool
      */
     protected function checkProxiedPermission(User $user, $action, $subject = null)
@@ -183,6 +183,7 @@ abstract class MagicPolicy
      * If subject is model or NULL, it will return plural lower cased model name.
      *
      * @param  null  $subject
+     *
      * @return string|null
      * @throws \Throwable
      */
