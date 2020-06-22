@@ -92,7 +92,7 @@ abstract class MagicPolicy
         }
 
         /*
-         * Get action my method name.
+         * Get action by method name.
          */
         $action = PermissionCheckHelper::getActionByMethodName($method);
 
